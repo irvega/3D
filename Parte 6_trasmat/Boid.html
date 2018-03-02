@@ -19,7 +19,7 @@
 
         uniform mat4 uMVMatrix;
         void main(void) {
-             gl_Position = uMVMatrix * vec4(aVertexPosition, 15.0);
+             gl_Position = uMVMatrix * vec4(aVertexPosition, 10.0);
              vColor = vec4(aVertexColor, 1.0);
         }
     </script>
@@ -106,9 +106,9 @@
         function setupBuffers() {
             var triangleVertices = [
                         //triangle Vertices
-                        -0.6, -0.6, 0.0,
-                         0.6, -0.6, 0.0,
-                         0.0,  0.8, 0.0,
+                        -0.4, -0.5, 0.0,
+                         0.4, -0.5, 0.0,
+                         0.0,  0.5, 0.0,
             ];
             trianglesVerticeBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, trianglesVerticeBuffer);
@@ -116,9 +116,9 @@
 
 	        var triangleColors = [
                         // triangle Colors
-                        0.0, 0.0, 0.0,
-                        0.0, 0.0, 0.0,
-                        0.0, 0.0, 1.0,
+                        0.0, 0.5, 0.5,
+                        0.0, 0.5, 0.5,
+                        0.0, 0.2, 0.5,
             ];
             trianglesColorBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, trianglesColorBuffer);
@@ -136,25 +136,18 @@
             gl.vertexAttribPointer(vertexColorAttribute, 3, gl.FLOAT, false, 0, 0);
 
 
-            count += 0.03;
             x=0.2;
-            y=0.3;
+            y=0.6;
             for(i=0; i<30; i++){
-              aleatorio = Math.round(Math.random()*100);
-
-              if(aleatorio % 2 == 0){
-                x+=0.5;
-                y+=0.5;
-                var posX = x*Math.cos(count)/y;
-                var posY = x*Math.sin(count)/y;
-              }else if(aleatorio % 3 == 0){
-                var posX = x*Math.sin(count)/y;
-                var posY = x*Math.cos(count)/y;
+              count += 0.00081;
+              x+=0.08;
+              y+=0.1;
+              if (i%2==0){
+                var posX = x*Math.cos(count/i);
+                var posY = x*Math.sin(count/x)/y;
               }else{
-                x+=0.8;
-                y+=0.8;
-                var posX = x*Math.cos(count)/x*y;
-                var posY = x*Math.sin(count)/y*y;
+                var posX = x*Math.sin(count/i);
+                var posY = y*Math.cos(count/y);
               }
               setUniforms(posX, posY);
               gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -168,7 +161,7 @@
         function setUniforms(posX, posY) {
             /* Render triangle */
             mat4.identity(mvMatrix);
-            mat4.translate(mvMatrix, [posX, posY, 0.0]);
+            mat4.translate(mvMatrix, [posX, -posY, 0.0]);
             gl.uniformMatrix4fv(mvMatrixUniform, false, mvMatrix);
         }
     </script>
